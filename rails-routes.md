@@ -13,13 +13,13 @@ This reference sheet assumes that you have already successfully set up a rails s
 
 Your Rails application will use a routes.rb file where you set your home page, or root, of your application:
 
-root 'categories#index'
+'''root 'categories#index''''
 
 In this file you would also create a resources command for the table name, which makes the standard REST paths available to you.  For our 'categories and listings' example, our resources command would look like this:
 
-resources: categories do
+'''resources: categories do
   resources: listings
-end
+end'''
 
 The remaining route functions will be handled by writing methods in the controller files.
 
@@ -28,15 +28,15 @@ The remaining route functions will be handled by writing methods in the controll
 Route to generate the categories index page (categories_controller.rb):
 
 ####Sinatra:
-get '/categories' do
+'''get '/categories' do
   @categories = Category.all
   erb :index
-end
+end'''
 
 ####Rails:
-def index
+'''def index
   @categories = Category.all
-end
+end'''
 
 
 ###Route to Create a New Category:
