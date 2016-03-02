@@ -31,7 +31,7 @@ The remaining route functions will be handled by writing methods in the controll
 
 Route to generate the categories index page (categories_controller.rb):
 
-####Sinatra:
+#####Sinatra:
 ``` ruby
 get '/categories' do
   @categories = Category.all
@@ -39,7 +39,7 @@ get '/categories' do
 end
 ```
 
-####Rails:
+#####Rails:
 ``` ruby
 def index
   @categories = Category.all
@@ -51,26 +51,33 @@ end
 
 Clicking the 'Create New Category' link from the index page makes a get request to the server which will find the following route in categories_controller.rb:
 
-####Sinatra:
-```get '/categories/new' do
+#####Sinatra:
+```
+get '/categories/new' do
   @category = Category.new
   erb :"category/new"
-end```
+end
+```
 
-####Rails:
-```def new
+#####Rails:
+```
+def new
   @category = Category.new
-end```
+end
+```
 
 This sends back the '/category/new' file to be rendered by the browser where a form should be rendered to take in user inputs to create a new category.  Example forms could be something as follows:
 
-####Sinatra:
-```<form method="post" action="/categories/new">
+#####Sinatra:
+```
+<form method="post" action="/categories/new">
   A bunch of cool html formsy stuff with a fancy-pants submit button goes here.
-</form>```
+</form>
+```
 
-####Rails:
-```<%= form_for @category do |f| %>
+#####Rails:
+```
+<%= form_for @category do |f| %>
   <p>
     <%= f.label :name %><br>
     <%= f.text_field :name %>
@@ -78,12 +85,14 @@ This sends back the '/category/new' file to be rendered by the browser where a f
   <p>
     <%= f.submit %>
   </p>
-<% end %>```
+<% end %>
+```
 
 After the user enters the required information and clicks the submit button, this makes a post request to create the category object and save it to the database.  In Sinatra, the post action must be explicitly called out.  In Rails, the path from the submit of the form to the create method in the categories controller is 'automatically' connected due to the resource command in the routes.rb file.
 
-####Sinatra:
-```post '/categories/new' do
+#####Sinatra:
+```
+post '/categories/new' do
   @category = Category.new(name: params[:name])
   if @category.save
     redirect '/categories/#{@category.id}'
@@ -91,48 +100,57 @@ After the user enters the required information and clicks the submit button, thi
     @errors = @post.errors.full_messages
     erb :"/category/new"
   end
-end```
+end
+```
 
-####Rails:
-```def create
+#####Rails:
+```
+def create
   @category = Category.new(category_params)
   if @category.save
     redirect_to category_path
   else
     render 'new'
   end
-end```
+end
+```
 
 
 ###Routes to Show, Edit, and Delete a Category:
 
 Back on the index page, there are a list of categories.  The category name is a link to the 'show' route for categories.  The view file for this index page could look something like this:
 
-####Sinatra:
-```<% @categories.each do |category| %>
+#####Sinatra:
+```
+<% @categories.each do |category| %>
     <a href="<%= "/categories/#{category.id}" %>"><%= category.name %></a>
     <a href="<%= "/categories/#{category.id}/edit" %>">Edit</a>
     <form method="post" action="/categories/<%=category.id%>">
       <input type="hidden" name="_method" value="delete">
       <input type="submit" value="Delete" class="button">
     </form>
-<% end %>```
+<% end %>
+```
 
-####Rails:
-```<% @categories.each do |category| %>
+#####Rails:
+```
+<% @categories.each do |category| %>
     <%= link_to category.name, category_path(category) %>
     <%= link_to 'Edit', edit_category_path(category) %>
     <%= link_to 'Destroy', category_path(category), method: :delete, data: { confirm: 'Are you sure?'} %>
-<% end %>```
+<% end %>
+```
 
 ###Show
 Clicking on the category name makes a get request to the server which finds the following route in categories_controller.rb:
 
-```get '/categories/:id' do
+```
+get '/categories/:id' do
   @category = Category.find(params[:id])
   @listings = @category.listings
   erb :"category/show"
-end```
+end
+```
 
 
 
