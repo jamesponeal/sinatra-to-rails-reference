@@ -141,9 +141,10 @@ Back on the index page, there are a list of categories.  The category name is a 
 <% end %>
 ```
 
-###Show
+#### Show
 Clicking on the category name makes a get request to the server which finds the following route in categories_controller.rb:
 
+#####Sinatra:
 ```
 get '/categories/:id' do
   @category = Category.find(params[:id])
@@ -152,17 +153,43 @@ get '/categories/:id' do
 end
 ```
 
+Which renders a view containing the listings, that looks something like this:
+```
+<% @listings.each do |listing| %>
+  <%= listing.price %>
+  <a href="/categories/<%=@category.id%>/listings/<%= listing.id %>"><%= listing.name %></a>
+  <a href="/categories/<%=@category.id%>/listings/<%= listing.id %>/edit"
+  <form method="post" action="/categories/<%=@category.id%>/listings/<%= listing.id %>">
+    <input type="hidden" name="_method" value="delete">
+    <input type="submit" value="Delete Entry" class="button">
+  </form>
+<% end %>
+```
 
-
-
-
-
-
-
+#####Rails:
+```
 def show
   @category = Category.find(params[:id])
   @listings = @category.listings
 end
+```
+
+
+
+
+
+
+#### Edit
+
+
+
+
+
+
+
+
+
+
 
 
 
