@@ -1,15 +1,21 @@
 
 #Sinatra to Rails Routes Reference Sheet
 
+Resources:
+
+http://guides.rubyonrails.org/getting_started.html
+http://guides.rubyonrails.org/routing.html
+
+
 ##Introduction:
 
 Rails is an MVC web framework created to give Ruby a way to establish a web presence easily and efficiently.  For someone like me who learned Sinatra first, one of the the things that stood out to me the most about Rails is the different syntax and procedure involved in creating routes.
 
 This document is intended to provide a basic comparison between creating and managing routes in Rails compared to Sinatra using a application with two tables: categories and listings, where categories have many listings, and listings belongs to category.
 
-##Getting Started with Rails:
+This reference sheet assumes that you have already successfully set up a rails skeleton with all required gems installed, and with modules and helpers included where they need to be.
 
-This reference sheet assumes that you have already successfully set up a rails skeleton with all required gems installed, and modules and helpers included where they need to be.
+##Getting Started with Rails:
 
 One of the major differences in handling routing in a Rails application compared to Sinatra is the use of a routes.rb file.  In the routes.rb file you will set your application home page (root), and also use a 'resources' command, which makes the standard REST paths available to you.  To get started, create the home page as shown below:
 
@@ -65,6 +71,8 @@ Nested routes can be tricky in both Sinatra and Rails, but the rules are very si
 For example, to edit a listing that belongs to a category, both the category and listing must be passed along with the route, and the method call will happen on the listing controller.
 
 ```<%= link_to 'Edit Listing', edit_category_listing_path(@category, @listing) %>```
+
+Clicking on this link will make a get request to the server, and call an 'edit' method in a file called 'listings_controller.rb', which will also render a view called 'edit.html.erb' in the 'views/listings' folder.  Rails magic... it's a beautiful thing.
 
 
 ##Example Routes for Categories and Listings:
