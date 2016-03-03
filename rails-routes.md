@@ -60,7 +60,11 @@ The 'rake routes' command in the terminal is the key to knowing what routes are 
 
 Rails greatly streamlines the standard CRUD paths into easy-to-read path names and simple controller methods.  The basic formula for creating a Rails route is by using the command shown in the Prefix column followed by the word 'path'.  For example, if you want to create a path to create a new category, your link should use ```new_category_path``` which then triggers the 'new' method to be called in your categories controller.
 
-Any path that includes any form of ```:id``` in the URL also needs some data to be passed along with it.  For example, if you want to utilize a route that will show the details of a specific category, you will need to pass the category along with the path as shown:  ```category_path(@category)```.
+Any path that includes any form of ```:id``` in the URL also needs some data to be passed along with it.  For example, if you want to utilize a route that will show the details of a specific category, you will need to pass the category along with the path as shown:
+``` ruby
+category_path(category)
+```
+
 
 ###Nested Routes
 
