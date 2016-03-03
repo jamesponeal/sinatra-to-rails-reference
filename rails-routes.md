@@ -32,7 +32,7 @@ end
 
 ###Rake Routes
 
-Now that this is set up, it's time to learn the most valuable command for planning routes in Rails.  If you type the command 'rake routes' from your command line, you will get a summary of the routes that have been created for you.  If you retain nothing else from this... remember 'rake routes'.  The print-out in your terminal will look something like this:
+Now that this is set up, it's time to learn the most valuable command for planning routes in Rails.  If you type the command ```rake routes``` from your command line, you will get a summary of the routes that have been created for you.  If you retain nothing else from this... remember ```rake routes```.  The print-out in your terminal will look something like this:
 
 
 ```
