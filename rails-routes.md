@@ -1,13 +1,13 @@
 
 #Sinatra to Rails Routes Reference Sheet
 
-###Introduction:
+##Introduction:
 
 Rails is an MVC web framework created to give Ruby a way to establish a web presence easily and efficiently.  For someone like me who learned Sinatra first, one of the the things that stood out to me the most about Rails is the different syntax and procedure involved in creating routes.
 
 This document is intended to provide a basic comparison between creating and managing routes in Rails compared to Sinatra using a application with two tables: categories and listings, where categories have many listings, and listings belongs to category.
 
-###Getting Started with Rails:
+##Getting Started with Rails:
 
 This reference sheet assumes that you have already successfully set up a rails skeleton with all required gems installed, and modules and helpers included where they need to be.
 
@@ -25,7 +25,9 @@ resources: categories do
 end
 ```
 
-Now that this is set up, if you type the command 'rake routes' from your command line, you will get a summary of the routes that have been created for you.  It will look similar to this:
+###Rake Routes
+
+Now that this is set up, it's time to learn the most valuable command for planning routes in Rails.  If you type the command 'rake routes' from your command line, you will get a summary of the routes that have been created for you.  If you retain nothing else from this... remember 'rake routes'.  The print-out in your terminal will look something like this:
 
 
 ```
@@ -53,13 +55,19 @@ The 'rake routes' command in the terminal is the key to knowing what routes are 
 
 Rails greatly streamlines the standard CRUD paths into easy-to-read path names and simple controller methods.  The basic formula for creating a Rails route is by using the command shown in the Prefix column followed by the word 'path'.  For example, if you want to create a path to create a new category, your link should use ```new_category_path``` which then triggers the 'new' method to be called in your categories controller.
 
-Any path that includes any form of ```:id``` in the URL also needs some data to be passed along with it.  For example, if you want to utilize a route that will show the details of listing that belongs to a specific category, you will need to pass the category and listing along with the path as shown:
-```category_listing(category, listing)```
+Any path that includes any form of ```:id``` in the URL also needs some data to be passed along with it.  For example, if you want to utilize a route that will show the details of a specific category, you will need to pass the category along with the path as shown:
+```category_path(category, listing)```
+
+###Nested Routes
+
+Nested routes can be tricky in both Sinatra and Rails, but the rules are very similar.  Follow the paths laid out by the 'rake routes' command, and pass in the objects that are needed.  One important thing to remember is that any path dealing with a nested path will utilize the controller of the nested table.
+
+For example, to edit a listing that belongs to a category, both the category and listing must be passed along with the route, and the method call will happen on the listing controller.
+
+```<%= link_to 'Edit Listing', edit_category_listing_path(@category, @listing) %>```
 
 
-
-
-
+##Example Routes for Categories and Listings:
 
 ###Route to Category Index Page:
 
@@ -175,7 +183,7 @@ Back on the index page, there are a list of categories.  The category name is a 
 <% end %>
 ```
 
-#### *Show*
+#### _*Show*_
 Clicking on the category name makes a get request to the server which finds the following route in categories_controller.rb:
 
 #####Sinatra:
@@ -227,7 +235,7 @@ Which renders the categories/show view, that might look something like this:
 </table>
 ```
 
-#### *Edit*
+#### _*Edit*_
 
 From our index page, clicking on the 'Edit' link will make a get request to the server which follows the following route in the categories controller:
 
@@ -270,26 +278,34 @@ Through Rails magic, the controller knows to then render the 'edit' view in the 
 def update
   @category = Category.find(params[:id])
   if @category.update(category_params)
-    redirect_to @category
+    redirect_to category_path(@category)
   else
     render 'edit'
   end
 end
 ```
 
-#### *Delete*
+#### _*Delete*_
+
+Once again starting from our index page, clicking on the 'Delete' link will make a delete request to the server which follows the following route in the categories controller:
 
 #####Sinatra:
 
+```
+delete '/categories/:id' do
+  @category = Category.find(params[:id])
+  @category.destroy
+  redirect '/categories'
+end
+```
 
 #####Rails:
-
 
 ```
 def destroy
   @category = Category.find(params[:id])
   @category.destroy
-  redirect_to categories_path(@category)
+  redirect_to categories_path
 end
 ```
 
