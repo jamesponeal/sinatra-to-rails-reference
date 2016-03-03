@@ -51,9 +51,11 @@ edit_category_listing GET    /categories/:category_id/listings/:id/edit(.:format
 
 The 'rake routes' command in the terminal is the key to knowing what routes are available to you in Rails, how to call them, and how they relate to the RESTful Sinatra routes you're used to.
 
-The basic formula for creating a Rails route is by using the command shown in the Prefix column followed by the word 'path'.  For example, if you want to create a path to create a new category, your link should use 'new_category_path', which then triggers the 'new' method to be called in your categories controller.
+Rails greatly streamlines the standard CRUD paths into easy-to-read path names and simple controller methods.  The basic formula for creating a Rails route is by using the command shown in the Prefix column followed by the word 'path'.  For example, if you want to create a path to create a new category, your link should use ```new_category_path``` which then triggers the 'new' method to be called in your categories controller.
 
-Rails greatly streamlines the standard CRUD paths into simple single line path names and controller methods.
+Any path that includes any form of ```:id``` in the URL also needs some data to be passed along with it.  For example, if you want to utilize a route that will show the details of listing that belongs to a specific category, you will need to pass the category and listing along with the path as shown:
+```category_listing(category, listing)```
+
 
 
 
@@ -87,7 +89,7 @@ Clicking the 'Create New Category' link from the index page makes a get request 
 ```
 get '/categories/new' do
   @category = Category.new
-  erb :"category/new"
+  erb :"categories/new"
 end
 ```
 
@@ -130,7 +132,7 @@ post '/categories/new' do
     redirect '/categories/#{@category.id}'
   else
     @errors = @post.errors.full_messages
-    erb :"/category/new"
+    erb :"/categories/new"
   end
 end
 ```
@@ -173,7 +175,7 @@ Back on the index page, there are a list of categories.  The category name is a 
 <% end %>
 ```
 
-#### Show
+#### *Show*
 Clicking on the category name makes a get request to the server which finds the following route in categories_controller.rb:
 
 #####Sinatra:
@@ -181,7 +183,7 @@ Clicking on the category name makes a get request to the server which finds the 
 get '/categories/:id' do
   @category = Category.find(params[:id])
   @listings = @category.listings
-  erb :"category/show"
+  erb :"categories/show"
 end
 ```
 
@@ -206,38 +208,65 @@ def show
 end
 ```
 
+Which renders the categories/show view, that might look something like this:
 
+```
+<%= @category.name %>
+<%= link_to "Create A New Listing", new_category_listing_path(@category) %><br>
+<table>
+  <tr>
+    <td><u>Item</u></td>
+    <td><u>Price</u></td>
+  </tr>
+  <% @category.listings.each do |listing| %>
+    <tr>
+      <td><%= link_to listing.title, category_listing_path(@category, listing) %></td>
+      <td><%= listing.price %></td>
+    </tr>
+  <% end %>
+</table>
+```
 
+#### *Edit*
 
+From our index page, clicking on the 'Edit' link will make a get request to the server which follows the following route in the categories controller:
 
+#####Sinatra:
 
-#### Edit
-
-
-
-
-
-
-
-
-
-
-
-
-
-def create
-  @category = Category.new(category_params)
-    if @category.save
-      redirect_to @category
-    else
-      render 'new'
-    end
+```
+get '/categories/:id/edit' do
+  @category = Category.find(params[:id])
+  erb :'categories/edit'
 end
+```
 
+Which renders a view for editing the category name along with any additional information the user should be editing.  Clicking the 'submit' button will send a PUT request to the server to update the category via the following path:
+
+```
+put '/categories/:id' do
+  @category = Category.find(params[:id])
+  @category.assign_attributes(params[:category])
+  if @category.save
+    redirect '/categories'
+  else
+    erb :errors
+  end
+end
+```
+
+#####Rails:
+
+In Rails, clicking the edit link will trigger the edit method in the controller file to be called.
+
+```
 def edit
   @category = Category.find(params[:id])
 end
+```
 
+Through Rails magic, the controller knows to then render the 'edit' view in the view/categories folder. Clicking the 'submit' button will send a PUT request to the server to update the category via the following controller method:
+
+```
 def update
   @category = Category.find(params[:id])
   if @category.update(category_params)
@@ -246,13 +275,23 @@ def update
     render 'edit'
   end
 end
+```
 
+#### *Delete*
+
+#####Sinatra:
+
+
+#####Rails:
+
+
+```
 def destroy
   @category = Category.find(params[:id])
   @category.destroy
   redirect_to categories_path(@category)
 end
-
+```
 
 
 
