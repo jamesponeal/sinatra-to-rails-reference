@@ -3,7 +3,7 @@
 
 Resources:
 
-http://guides.rubyonrails.org/getting_started.html
+http://guides.rubyonrails.org/getting_started.html <br />
 http://guides.rubyonrails.org/routing.html
 
 
