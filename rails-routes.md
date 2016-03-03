@@ -1,8 +1,7 @@
 
-#Sinatra to Rails Routes Reference Sheet
+#Rails Routes Reference Sheet and Sinatra Comparison
 
-Resources:
-
+Resources: <br />
 http://guides.rubyonrails.org/getting_started.html <br />
 http://guides.rubyonrails.org/routing.html
 
@@ -19,13 +18,13 @@ This reference sheet assumes that you have already successfully set up a rails s
 
 One of the major differences in handling routing in a Rails application compared to Sinatra is the use of a routes.rb file.  In the routes.rb file you will set your application home page (root), and also use a 'resources' command, which makes the standard REST paths available to you.  To get started, create the home page as shown below:
 
-```
+``` ruby
 root 'categories#index'
 ```
 
 In the routes.rb file you would also create a resources command for the table names.  For our 'categories and listings' example, where a category has many listings and our listings belongs to a category, the resources command would look like this:
 
-```
+``` ruby
 resources: categories do
   resources: listings
 end
