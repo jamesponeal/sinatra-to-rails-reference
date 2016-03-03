@@ -11,21 +11,53 @@ This document is intended to provide a basic comparison between creating and man
 
 This reference sheet assumes that you have already successfully set up a rails skeleton with all required gems installed, and modules and helpers included where they need to be.
 
-Your Rails application will use a routes.rb file where you set your home page, or root, of your application:
+One of the major differences in handling routing in a Rails application compared to Sinatra is the use of a routes.rb file.  In the routes.rb file you will set your application home page (root), and also use a 'resources' command, which makes the standard REST paths available to you.  To get started, create the home page as shown below:
 
-``` ruby
+```
 root 'categories#index'
 ```
 
-In this file you would also create a resources command for the table name, which makes the standard REST paths available to you.  For our 'categories and listings' example, our resources command would look like this:
+In the routes.rb file you would also create a resources command for the table names.  For our 'categories and listings' example, where a category has many listings and our listings belongs to a category, the resources command would look like this:
 
-``` ruby
+```
 resources: categories do
   resources: listings
 end
 ```
 
-The remaining route functions will be handled by writing methods in the controller files.
+Now that this is set up, if you type the command 'rake routes' from your command line, you will get a summary of the routes that have been created for you.  It will look similar to this:
+
+
+```
+               Prefix Verb   URI Pattern                                          Controller#Action
+
+    category_listings GET    /categories/:category_id/listings(.:format)          listings#index
+                      POST   /categories/:category_id/listings(.:format)          listings#create
+ new_category_listing GET    /categories/:category_id/listings/new(.:format)      listings#new
+edit_category_listing GET    /categories/:category_id/listings/:id/edit(.:format) listings#edit
+     category_listing GET    /categories/:category_id/listings/:id(.:format)      listings#show
+                      PATCH  /categories/:category_id/listings/:id(.:format)      listings#update
+                      PUT    /categories/:category_id/listings/:id(.:format)      listings#update
+                      DELETE /categories/:category_id/listings/:id(.:format)      listings#destroy
+           categories GET    /categories(.:format)                                categories#index
+                      POST   /categories(.:format)                                categories#create
+         new_category GET    /categories/new(.:format)                            categories#new
+        edit_category GET    /categories/:id/edit(.:format)                       categories#edit
+             category GET    /categories/:id(.:format)                            categories#show
+                      PATCH  /categories/:id(.:format)                            categories#update
+                      PUT    /categories/:id(.:format)                            categories#update
+                      DELETE /categories/:id(.:format)                            categories#destroy
+```
+
+The 'rake routes' command in the terminal is the key to knowing what routes are available to you in Rails, how to call them, and how they relate to the RESTful Sinatra routes you're used to.
+
+The basic formula for creating a Rails route is by using the command shown in the Prefix column followed by the word 'path'.  For example, if you want to create a path to create a new category, your link should use 'new_category_path', which then triggers the 'new' method to be called in your categories controller.
+
+Rails greatly streamlines the standard CRUD paths into simple single line path names and controller methods.
+
+
+
+
 
 ###Route to Category Index Page:
 
@@ -220,38 +252,6 @@ def destroy
   @category.destroy
   redirect_to categories_path(@category)
 end
-
-
-
-               Prefix Verb   URI Pattern                                          Controller#Action
-                 root GET    /                                                    categories#index
-                users GET    /users(.:format)                                     users#index
-                      POST   /users(.:format)                                     users#create
-             new_user GET    /users/new(.:format)                                 users#new
-            edit_user GET    /users/:id/edit(.:format)                            users#edit
-                 user GET    /users/:id(.:format)                                 users#show
-                      PATCH  /users/:id(.:format)                                 users#update
-                      PUT    /users/:id(.:format)                                 users#update
-                      DELETE /users/:id(.:format)                                 users#destroy
-    category_listings GET    /categories/:category_id/listings(.:format)          listings#index
-                      POST   /categories/:category_id/listings(.:format)          listings#create
- new_category_listing GET    /categories/:category_id/listings/new(.:format)      listings#new
-edit_category_listing GET    /categories/:category_id/listings/:id/edit(.:format) listings#edit
-     category_listing GET    /categories/:category_id/listings/:id(.:format)      listings#show
-                      PATCH  /categories/:category_id/listings/:id(.:format)      listings#update
-                      PUT    /categories/:category_id/listings/:id(.:format)      listings#update
-                      DELETE /categories/:category_id/listings/:id(.:format)      listings#destroy
-           categories GET    /categories(.:format)                                categories#index
-                      POST   /categories(.:format)                                categories#create
-         new_category GET    /categories/new(.:format)                            categories#new
-        edit_category GET    /categories/:id/edit(.:format)                       categories#edit
-             category GET    /categories/:id(.:format)                            categories#show
-                      PATCH  /categories/:id(.:format)                            categories#update
-                      PUT    /categories/:id(.:format)                            categories#update
-                      DELETE /categories/:id(.:format)                            categories#destroy
-                login GET    /login(.:format)                                     sessions#new
-                      POST   /login(.:format)                                     sessions#create
-               logout GET    /logout(.:format)                                    sessions#destroy
 
 
 
